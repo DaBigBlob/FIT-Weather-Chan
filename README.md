@@ -13,6 +13,8 @@ Hourly weather updates for Florida Institute of Technology campus
 
 ## Why is the embed color so ugly?
 
+Right. So, the embed color is not static but is decided based on the temperature. ([code here](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/c20dd69188d8c4955dba3ac691aa9a76d7d3c335/once_upon_a_closed_source.ts#L42))
+
 ## Nerd stuff
 
 ### Where is the rest of the code?
@@ -28,7 +30,7 @@ import { CtoF, Err, FtoC, Ok, Result, dateIsoToUnixSec, exists, get_color_int, u
 import { host_url } from '../main';
 ```
 **Where is the code for these imports?** \
-Most of these imports either in this repository or are from NPM packages.
+Most of these imports either in this repository or are from [NPM packages](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/package.json).
 FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
 
 ### There are spelling mistakes in variable names
