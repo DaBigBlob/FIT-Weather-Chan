@@ -13,7 +13,9 @@ Hourly weather updates for Florida Institute of Technology campus
 
 ## Why is the embed color so ugly?
 
-## Where is the rest of the code?
+## Nerd stuff
+
+### Where is the rest of the code?
 
 ```ts
 import { InteractionType, InteractionResponseType, RouteBases, Routes } from 'discord-api-types/v10';
@@ -26,7 +28,8 @@ import { CtoF, Err, FtoC, Ok, Result, dateIsoToUnixSec, exists, get_color_int, u
 import { host_url } from '../main';
 ```
 **Where is the code for these imports?** \
-So, FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
+Most of these imports either in this repository or are from NPM packages.
+FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
 
 ### There are spelling mistakes in variable names
 I dont care.

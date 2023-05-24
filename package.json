@@ -1,0 +1,22 @@
+{
+  "name": "fit-weather-chan",
+  "version": "1.0.0",
+  "description": "Hourly weather updates for Florida Institute of Technology campus",
+  "main": "bot.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaBigBlob/FIT-Weather-Chan.git"
+  },
+  "author": "IdkWhatever69#0284 (710693649662476359)",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/DaBigBlob/FIT-Weather-Chan/issues"
+  },
+  "homepage": "https://github.com/DaBigBlob/FIT-Weather-Chan#readme",
+  "dependencies": {
+    "discord-api-types": "^0.37.42"
+  }
+}
