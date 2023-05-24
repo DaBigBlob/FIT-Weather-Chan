@@ -13,7 +13,7 @@ const fetch_headers = {
     body: null,
     method: 'GET',
     headers: {
-        'User-Agent': `${fitweather_credentials.name}/1.0 (Florida Institute of Technology Weather Discord Bot (Student Run), )`, //TODO: add github repo url
+        'User-Agent': `${fitweather_credentials.name}/1.0 (Florida Institute of Technology Weather Discord Bot (Student Run), https://github.com/DaBigBlob/FIT-Weather-Chan)`,
         'Accept': "application/geo+json"
     }
 };
@@ -97,7 +97,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
             body: JSON.stringify({
                 content: null,
                 username: "FIT Weather Chan",
-                avatar_url: "https://cdn.discordapp.com/avatars/859875337697361920/db75b635a3116e951abb610aac10b8d3.png", //og awatar
+                avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/avatar.png", //og awatar
                 allowed_mentions: {users: [], roles: []},
                 embeds: [{
                     description: `**Weather** <t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>`,
@@ -114,7 +114,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
                         { name: `Overall ${day_forcase.ok.name}`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
                     ] : []),
                     image: { url: `${host_url}/fitweather/dist/${randomness}` }, //to circumvent discord's media caching ✨nightmare✨
-                    footer: { text: ""}
+                    footer: { text: "https://github.com/DaBigBlob/FIT-Weather-Chan"}
                 }]
             }),
             method: 'POST',
