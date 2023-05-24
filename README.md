@@ -15,6 +15,19 @@ Hourly weather updates for Florida Institute of Technology campus
 
 ## Where is the rest of the code?
 
+```ts
+import { InteractionType, InteractionResponseType, RouteBases, Routes } from 'discord-api-types/v10';
+import { APIPingInteraction } from 'discord-api-types/payloads/v10/_interactions/ping';
+import { fitweather_credentials } from '../../../secrets';
+import { createAndGetChannelWebhook, discordAuthed, getChannelWebhook } from '../discord-utils';
+import { WeatherAPIEndpoint, Period, WeatherData } from './weather-types';
+import { discord_channels } from './others.json';
+import { CtoF, Err, FtoC, Ok, Result, dateIsoToUnixSec, exists, get_color_int, udef } from '../utils';
+import { host_url } from '../main';
+```
+**Where is the code for these imports?** \
+So, FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
+
 ### There are spelling mistakes in variable names
 I dont care.
 
@@ -23,4 +36,4 @@ Please start making pull requests.
 
 ## Special thanks
 - [NATIONAL WEATHER SERVICE](https://www.weather.gov/) for data.
-- [WillowTheFuta#2396](https://discord.com/users/710302678323953676) for the avatar.
+- [WillowTheFuta#2396](https://discord.com/users/710302678323953676) for the avatar and inspiration for *this*.
