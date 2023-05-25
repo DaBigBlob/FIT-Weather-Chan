@@ -15,7 +15,7 @@ Hourly weather updates for Florida Institute of Technology campus
 
 ## Why is the embed color so ugly?
 
-Right. So, the embed color is not static but is decided based on the temperature. ([code here](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/c20dd69188d8c4955dba3ac691aa9a76d7d3c335/once_upon_a_closed_source.ts#L42))
+Right. So, the embed color is not static but is decided based on the temperature. ([code here](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/e60519187fbfdf824bcca6fc342bfc5dd92f1497/once_upon_a_closed_source.ts#L42))
 
 ## Nerd stuff
 
