@@ -10,12 +10,8 @@ import { CtoF, Err, FtoC, Ok, Result, dateIsoToUnixSec, exists, get_color_int, u
 import { host_url } from '../main';
 
 const fetch_headers = {
-    body: null,
-    method: 'GET',
-    headers: {
-        'User-Agent': `${fitweather_credentials.name}/1.0 (Florida Institute of Technology Weather Discord Bot (Student Run), https://github.com/DaBigBlob/FIT-Weather-Chan)`,
-        'Accept': "application/geo+json"
-    }
+    'User-Agent': `${fitweather_credentials.name}/1.0 (Florida Institute of Technology Weather Discord Bot (Student Run), https://github.com/DaBigBlob/FIT-Weather-Chan)`,
+    'Accept': "application/geo+json"
 };
 
 //=====place for actual stuff=====
@@ -57,7 +53,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
 
     //get hourly weather
     const wthr: Result<Period> = await (async () => {
-        const proto_res = (await (await fetch(`${WeatherAPIEndpoint}/hourly`, fetch_headers)).json()) as WeatherData|undefined;
+        const proto_res = (await (await fetch(`${WeatherAPIEndpoint}/hourly`, { body: null, method: 'GET', headers: fetch_headers})).json()) as WeatherData|undefined;
         if (!exists(proto_res) || !exists(proto_res.properties.periods)) return new Err(`No data from ${WeatherAPIEndpoint}/hourly`);
 
         const result = proto_res.properties.periods.filter(p => (dateIsoToUnixSec(p.startTime)*1000 > now))[0];
@@ -69,7 +65,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
 
     //get overall day dorcast
     const day_forcase = await (async () => {
-        const proto_res = (await (await fetch(WeatherAPIEndpoint, fetch_headers)).json()) as WeatherData|undefined;
+        const proto_res = (await (await fetch(WeatherAPIEndpoint, { body: null, method: 'GET', headers: fetch_headers})).json()) as WeatherData|undefined;
         if (!exists(proto_res) || !exists(proto_res.properties.periods)) return new Err(`No data from ${WeatherAPIEndpoint}`);
 
         const result = proto_res.properties.periods.find(p => (p.number == 1));
