@@ -39,26 +39,25 @@ export class Err {
 
 export type Result<T> = Ok<T>|Err;
 
-export function get_color_int(tmpr?: number): number { //range: -25c to 75c
+export function get_color_int(tmpr?: number): number { //range: 10c to 40c
   let result = "";
   if (!exists(tmpr)) { //no temperature -> return random
     const characters = '0123456789abcdef';
     const randomValues = new Uint8Array(6); crypto.getRandomValues(randomValues);
     randomValues.forEach(int => result += characters.charAt(int % characters.length));
   } else { //this is a linear map 🥲
-    if (tmpr <= -25) tmpr = -25;
-    if (tmpr >= 75) tmpr = 75;
-    tmpr += 25;
-    if (tmpr > 50) {
-      result += Math.floor((tmpr-50)*255/50).toString(16);
+    if (tmpr <= 10) tmpr = 10;
+    if (tmpr >= 40) tmpr = 40;
+    if (tmpr > 25) {
+        result += Math.floor((tmpr-25)*255/15).toString(16);
     } else {
-      result += "00";
+        result += "00";
     }
-    result += "83";
-    if (tmpr < 50) {
-      result += Math.floor((tmpr)*255/50).toString(16);
+    result += "00";
+    if (tmpr < 25) {
+        result += Math.floor((25-tmpr)*255/15).toString(16);
     } else {
-      result += "00";
+        result += "00";
     }
   }
   return parseInt(result, 16);
