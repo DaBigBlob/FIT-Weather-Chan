@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>temperature color</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            border: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .centre_container {
+            --height: 30vh;
+            --width: 70vw;
+            width: var(--width);
+            margin-left: calc((100vw - var(--width))/2);
+            height: var(--height);
+            margin-top: calc((100vh - var(--height))/2);
+            background-color: rgb(9, 9, 16);
+            color: antiquewhite;
+            border-radius: 20px;
+        }
+
+        textarea {
+            border-radius: 20px;
+            resize: none;
+        }
+
+        .number_place {
+            width: 100%;
+            height: 20%;
+            text-align: center;
+            padding: auto;
+            font-size: 50px;
+        }
+        .log_place {
+            background-color: rgb(76, 78, 79);
+            color: antiquewhite;
+            width: 98%;
+            height: 57%;
+            padding-left: 2%;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .slider {
+            --border-width: 2px;
+            width: calc(100% - var(--border-width));
+            background-color: rgb(9, 9, 16);
+            border: var(--border-width) solid antiquewhite;
+            appearance: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+    </style>
+    <div class="centre_container">
+        <textarea id="log_box" cols="30" rows="10" class="log_place" readonly></textarea>
+        <div id="temperature_number" class="number_place">0</div>
+        <input type="range" min="5" max="45" value="25" class="slider" id="temperature_color_range">
+    </div>
+    <script>
+        const slider = document.getElementById("temperature_color_range")
+        const text_box = document.getElementById("temperature_number");
+        const log_box = document.getElementById("log_box");
+        const body = document.body;
+        let err_log = "";
+        function log(err){
+            err_log += `\n${err}`;
+            log_box.innerHTML = err_log;
+            log_box.scrollTop = log_box.scrollHeight;
+        }
+        function clear_log(){
+            err_log = "";
+            log_box.scrollTop = log_box.scrollHeight;
+        };
+        function exists(data) {
+            if (data === null || data === undefined) return false;
+            return true;
+        }
+        function get_color_hex(tmpr) {
+            tmpr = parseInt(tmpr);
+            let result = "";
+            if (!exists(tmpr)) {
+                const characters = "0123456789abcdef";
+                const randomValues = new Uint8Array(6);
+                crypto.getRandomValues(randomValues);
+                randomValues.forEach(
+                    int => (result += characters.charAt(int % characters.length))
+                )
+            } else {//range: 10c to 40c
+                if (tmpr <= 10) tmpr = 10;
+                if (tmpr >= 40) tmpr = 40;
+                log("+ve tmpr: "+tmpr);
+                if (tmpr > 25) {
+                    result += Math.floor((tmpr-25)*255/15).toString(16);
+                } else {
+                    result += "00";
+                }
+                log("after red: "+result);
+                result += "00";
+                log("after green: "+result);
+                if (tmpr < 25) {
+                    result += Math.floor((25-tmpr)*255/15).toString(16);
+                } else {
+                    result += "00";
+                }
+                log("after blue: "+result);
+            }
+            return result;
+        }
+        slider.oninput = () => {
+            const color_hex = get_color_hex(slider.value);
+            text_box.innerHTML = `${slider.value}°C #${color_hex}`;
+            body.style.backgroundColor = `#${color_hex}`
+            clear_log();
+        }
+    </script>
+</body>
+</html>

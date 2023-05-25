@@ -78,8 +78,28 @@ export async function dealFITWeatherScheduler(): Promise<void> {
         return new Err("Today's data not found");
     })();
 
-    //randomness for media cache sync 
-    const randomness = crypto.randomUUID();
+    const payload = JSON.stringify({
+        content: null,
+        username: "FIT Weather Chan",
+        avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/avatar.png", //og awatar
+        allowed_mentions: {users: [], roles: []},
+        embeds: [{
+            description: `**Weather** <t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>\n[>project source code here<](https://github.com/DaBigBlob/FIT-Weather-Chan)`,
+            color: get_color_int((wthr.ok.temperatureUnit == "F") ? FtoC(wthr.ok.temperature) : wthr.ok.temperature),
+            thumbnail: { url: udef(wthr.ok.icon, "") },
+            fields: [
+                { name: "TL;DR", value: `${wthr.ok.shortForecast}`, inline: false },
+                { name: "Temperature", value: `${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
+                { name: "Wind", value: `${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
+                { name: "Dewpoint", value: `${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
+                { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}%`, inline: true },
+                { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
+            ].concat((day_forcase.isOk()) ? [
+                { name: `Overall ${day_forcase.ok.name}`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
+            ] : []),
+            image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
+        }]
+    });
 
     //for each discord channel
     for (let i=0; i<discord_channels.length; i++) {
@@ -94,29 +114,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
         if (!exists(got_hook)) continue;
 
         await fetch(`${RouteBases.api}${Routes.webhook(got_hook.id, got_hook.token)}`, {
-            body: JSON.stringify({
-                content: null,
-                username: "FIT Weather Chan",
-                avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/avatar.png", //og awatar
-                allowed_mentions: {users: [], roles: []},
-                embeds: [{
-                    description: `**Weather** <t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>`,
-                    color: get_color_int((wthr.ok.temperatureUnit == "F") ? FtoC(wthr.ok.temperature) : wthr.ok.temperature),
-                    thumbnail: { url: udef(wthr.ok.icon, "") },
-                    fields: [
-                        { name: "TL;DR", value: `${wthr.ok.shortForecast}`, inline: false },
-                        { name: "Temperature", value: `${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
-                        { name: "Wind", value: `${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
-                        { name: "Dewpoint", value: `${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
-                        { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}%`, inline: true },
-                        { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
-                    ].concat((day_forcase.isOk()) ? [
-                        { name: `Overall ${day_forcase.ok.name}`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
-                    ] : []),
-                    image: { url: `${host_url}/fitweather/dist/${randomness}` }, //to circumvent discord's media caching ✨nightmare✨
-                    footer: { text: "https://github.com/DaBigBlob/FIT-Weather-Chan"}
-                }]
-            }),
+            body: payload,
             method: 'POST',
             headers: {'content-type': 'application/json'}
         });
