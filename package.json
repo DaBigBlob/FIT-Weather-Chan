@@ -4,7 +4,9 @@
   "description": "Hourly weather updates for Florida Institute of Technology campus",
   "main": "bot.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "downstream": "cp ../new.ventures0/bots/cloudflare/src/FIT-weather/* ./",
+    "build-pages": "npx tsc && cp ./dist/once_upon_a_closed_source.js ./pages/main.js && cp ./README.md ./pages/README.md",
+    "all": "npm run downstream && npm run build-pages"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/DaBigBlob/FIT-Weather-Chan#readme",
   "dependencies": {
-    "discord-api-types": "^0.37.42"
+    "discord-api-types": "^0.37.42",
+    "typescript": "^5.0.4"
   }
 }
