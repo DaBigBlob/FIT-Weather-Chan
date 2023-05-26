@@ -14,34 +14,43 @@ export function exists<T>(data: T|null|undefined): data is T {
 }
 
 export class Log {
-  locked: boolean;
-  log_box: HTMLTextAreaElement;
+  private locked: boolean;
+  private log_data: string;
+  private log_box: HTMLTextAreaElement;
 
   constructor(target_elm: HTMLTextAreaElement, init_text?: string, locked?: boolean) {
-      this.log_box = target_elm;
-      if (exists(init_text)) target_elm.innerHTML = init_text;
-      this.locked = exists(locked) ? locked : false;
+    this.log_box = target_elm;
+    this.log_data = exists(init_text) ? init_text : "";
+    this.locked = exists(locked) ? locked : false;
   }
 
   add(text: string): boolean {
       if (this.locked) {
-          return false;
+        return false;
       } else {
-          this.log_box.innerHTML += `${text}\n`;
-          return true;
+        this.log_data += `${text}\n`;
+        this.log_box.innerHTML = this.log_data;
+        return true;
       }
   };
+
   lock(act: boolean): boolean {
-      this.locked = act;
-      return true;
+    this.locked = act;
+    return true;
   }
-  clr(): boolean {
-      this.log_box.innerHTML = "";
-      return true;
+
+  clrscr(): boolean {
+    this.log_box.innerHTML = "";
+    return true;
   };
+
+  clrdata(): boolean {
+    this.log_data = "";
+    return true;
+  }
 }
 
-export function get_color_int(by_c?: {high: number, low: number, mild: number, tmpr: number}): string {
+export function get_color_int(by_c?: {high: number, low: number, mild: number, tmpr: number}): number {
   let res = "";
   if (!exists(by_c)) { //no temperature -> return random
     const characters = '0123456789abcdef';
@@ -62,7 +71,7 @@ export function get_color_int(by_c?: {high: number, low: number, mild: number, t
       res += "7f"+Math.floor((by_c.tmpr-25)*255/15).toString(16);
     }
   }
-  return res;
+  return parseInt(res, 16);
 }
 
 export function FtoC(F: number) {
