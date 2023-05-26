@@ -13,6 +13,34 @@ export function exists<T>(data: T|null|undefined): data is T {
   return true;
 }
 
+export class Log {
+  locked: boolean;
+  log_box: HTMLTextAreaElement;
+
+  constructor(target_elm: HTMLTextAreaElement, init_text?: string, locked?: boolean) {
+      this.log_box = target_elm;
+      if (exists(init_text)) target_elm.innerHTML = init_text;
+      this.locked = exists(locked) ? locked : false;
+  }
+
+  add(text: string): boolean {
+      if (this.locked) {
+          return false;
+      } else {
+          this.log_box.innerHTML += `${text}\n`;
+          return true;
+      }
+  };
+  lock(act: boolean): boolean {
+      this.locked = act;
+      return true;
+  }
+  clr(): boolean {
+      this.log_box.innerHTML = "";
+      return true;
+  };
+}
+
 export function get_color_int(by_c?: {high: number, low: number, mild: number, tmpr: number}): string {
   let res = "";
   if (!exists(by_c)) { //no temperature -> return random
