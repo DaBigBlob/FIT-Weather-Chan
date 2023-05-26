@@ -1,6 +1,6 @@
 "use strict";
 
-import { exists, get_color_int } from '../once_upon_a_closed_source';
+import { exists, get_color_int } from '../src/once_upon_a_closed_source';
 
 class Log {
     locked: boolean;

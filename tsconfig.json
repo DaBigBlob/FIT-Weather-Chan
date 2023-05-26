@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "module": "none",
+    "module": "amd",
     "lib": ["es2021", "DOM"],
     "declaration": true,
     "outDir": "./dist",
@@ -24,12 +24,12 @@
   },
   "include": [
     "./pages/*.ts",
-    "./once_upon_a_closed_source.ts",
+    "./src/once_upon_a_closed_source.ts",
   ],
   "exclude": [
     "node_modules/",
     "dist/",
-    "./bot.ts",
-    "./weather-types.ts"
+    "./src/bot.ts",
+    "./src/weather-types.ts"
   ]
 }
