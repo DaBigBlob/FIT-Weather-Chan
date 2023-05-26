@@ -9,10 +9,15 @@
 <body>
     <style>
         * {
-            margin: 0;
-            border: 0;
-            padding: 0;
+            /* [PUBLIC] globals */
+            padding: 0px;
+            border: 0px;
+            margin: 0px;
             position: relative;
+
+            /* [PUBLIC] specifics */
+            --pannel-width: 70vw;
+            --pannel-height: 40vh;
         }
 
         body {
@@ -20,49 +25,114 @@
         }
 
         .centre_container {
-            --height: 30vh;
-            --width: 70vw;
-            width: var(--width);
-            margin-left: calc((100vw - var(--width))/2);
-            height: var(--height);
-            margin-top: calc((100vh - var(--height))/2);
+            /* template */
+            /* ----------------- */
+            --width: var(--pannel-width);
+            --height: var(--pannel-height);
+            --margin: 0px;
+            --border: 0px;
+            --padding: 0px;
+            --parent-width: 100vw;
+            --parent-height: 100vh;
+            border-radius: 20px;
+            position: relative;
+            /* ----------------- */
+            width: calc(var(--width) - (var(--margin) + var(--border) + var(--padding))*2);
+            height: calc(var(--height) - (var(--margin) + var(--border) + var(--padding))*2);
+            padding: var(--padding);
+            border: var(--border);
+            margin: var(--margin);
+            margin-left: calc((var(--parent-width) - var(--width))/2); 
+            margin-top: calc((var(--parent-height) - var(--height))/2);
+            /* ----------------- */
+
             background-color: rgb(9, 9, 16);
             color: antiquewhite;
-            border-radius: 20px;
         }
 
-        textarea {
+        .log_place {
+            /* template */
+            /* -------edit---------- */
+            --width: var(--pannel-width);
+            --height: calc(var(--pannel-height)*(7/10));
+            --margin: 0px;
+            --border: 0px;
+            --padding: 20px;
+            --parent-width: var(--pannel-width);
+            --parent-height: var(--pannel-height);
             border-radius: 20px;
+            position: relative;
+            /* --------switch--------- */
+            width: calc(var(--width) - (var(--margin) + var(--border) + var(--padding))*2);
+            height: calc(var(--height) - (var(--margin) + var(--border) + var(--padding))*2);
+            padding: var(--padding);
+            border: var(--border);
+            margin: var(--margin);
+            /* margin-left: calc((var(--parent-width) - var(--width))/2);  */
+            /* margin-top: calc((var(--parent-height) - var(--height))/2); */
+            /* ----------------- */
+
+            background-color: rgb(76, 78, 79);
+            color: antiquewhite;
+            font-family: monospace;
+            font-size: 25px;
             resize: none;
         }
 
         .number_place {
+            /* template */
+            /* -------edit---------- */
+            --width: var(--pannel-width);
+            --height: calc(var(--pannel-height)*(2/10));
+            --margin: 0px;
+            --border: 0px;
+            --padding: 5px;
+            --parent-width: var(--pannel-width);
+            --parent-height: var(--pannel-height);
+            border-radius: 20px;
+            position: relative;
+            /* --------switch--------- */
+            width: calc(var(--width) - (var(--margin) + var(--border) + var(--padding))*2);
+            height: calc(var(--height) - (var(--margin) + var(--border) + var(--padding))*2);
+            padding: var(--padding);
+            border: var(--border);
+            margin: var(--margin);
+            /* margin-left: calc((var(--parent-width) - var(--width))/2);  */
+            /* margin-top: calc((var(--parent-height) - var(--height))/2); */
+            /* ----------------- */
+            
             width: 100%;
             height: 20%;
             text-align: center;
             padding: auto;
             font-size: 50px;
         }
-        .log_place {
-            background-color: rgb(76, 78, 79);
-            color: antiquewhite;
-            width: 98%;
-            height: 57%;
-            padding-left: 2%;
-            padding-top: 1%;
-            padding-bottom: 1%;
-            font-family: monospace;
-            font-size: 13px;
-        }
 
         .slider {
-            --border-width: 2px;
-            width: calc(100% - var(--border-width));
+            /* template */
+            /* -------edit---------- */
+            --width: var(--pannel-width);
+            --height: calc(var(--pannel-height)*(1/10));
+            --margin: 0px;
+            --border: 2px;
+            --padding: 0px;
+            --parent-width: var(--pannel-width);
+            --parent-height: var(--pannel-height);
+            border-radius: 20px;
+            position: relative;
+            /* --------switch--------- */
+            width: calc(var(--width) - (var(--margin) + var(--border) + var(--padding))*2);
+            height: calc(var(--height) - (var(--margin) + var(--border) + var(--padding))*2);
+            padding: var(--padding);
+            border: var(--border) solid antiquewhite;
+            margin: var(--margin);
+            /* margin-left: calc((var(--parent-width) - var(--width))/2);  */
+            /* margin-top: calc((var(--parent-height) - var(--height))/2); */
+            /* ----------------- */
+
             background-color: rgb(9, 9, 16);
-            border: var(--border-width) solid antiquewhite;
             appearance: none;
             cursor: pointer;
-            border-radius: 10px;
         }
     </style>
     <div class="centre_container">

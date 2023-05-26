@@ -12,7 +12,7 @@
 // LIBRARIES AND PUT THEM HERE.
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dateIsoToUnixSec = exports.CtoF = exports.FtoC = exports.get_color_int = exports.Log = exports.exists = void 0;
+exports.dateIsoToUnixSec = exports.CtoF = exports.FtoC = exports.get_color_int = exports.log = exports.Log = exports.exists = void 0;
 function exists(data) {
     if ((data === null) ||
         (data === undefined))
@@ -22,9 +22,24 @@ function exists(data) {
 exports.exists = exists;
 class Log {
     constructor(target_elm, init_text, locked) {
-        this.log_box = target_elm;
+        this.log_box = exists(target_elm) ? target_elm : null;
         this.log_data = exists(init_text) ? init_text : "";
         this.locked = exists(locked) ? locked : false;
+    }
+    update_log_box(text) {
+        if (exists(this.log_box)) {
+            if (exists(text)) {
+                this.log_box.innerHTML = this.log_data;
+                return true;
+            }
+            else {
+                this.log_box.innerHTML = this.log_data;
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
     add(text) {
         if (this.locked) {
@@ -32,7 +47,7 @@ class Log {
         }
         else {
             this.log_data += `${text}\n`;
-            this.log_box.innerHTML = this.log_data;
+            this.update_log_box();
             return true;
         }
     }
@@ -41,17 +56,22 @@ class Log {
         this.locked = act;
         return true;
     }
-    clrscr() {
-        this.log_box.innerHTML = "";
+    add_screen(target_elm) {
+        this.log_box = target_elm;
+        return true;
+    }
+    clear_screen() {
+        this.update_log_box("");
         return true;
     }
     ;
-    clrdata() {
+    clear_data() {
         this.log_data = "";
         return true;
     }
 }
 exports.Log = Log;
+exports.log = new Log();
 function get_color_int(by_c) {
     let res = "";
     if (!exists(by_c)) { //no temperature -> return random
@@ -71,13 +91,13 @@ function get_color_int(by_c) {
             by_c.tmpr = by_c.high;
         if (by_c.tmpr > by_c.mild) {
             const norm = (by_c.tmpr - by_c.mild) / (by_c.high - by_c.mild);
-            res = Math.floor(127 + (norm * 127)).toString(16);
-            res += "7f" + Math.floor((by_c.tmpr - 25) * 255 / 15).toString(16);
+            res = Math.floor(127 + (norm * 127)).toString(16).padStart(2, '0');
+            res += "7f" + Math.floor((1 - norm) * 127).toString(16).padStart(2, '0');
         }
         else {
             const norm = (by_c.tmpr - by_c.low) / (by_c.mild - by_c.low);
-            res = Math.floor(norm * 127).toString(16);
-            res += "7f" + Math.floor((by_c.tmpr - 25) * 255 / 15).toString(16);
+            res = Math.floor(norm * 127).toString(16).padStart(2, '0');
+            res += "7f" + Math.floor(127 + (1 - norm) * 127).toString(16).padStart(2, '0');
         }
     }
     return parseInt(res, 16);
@@ -137,18 +157,19 @@ const text_box = document.getElementById("temperature_number");
 const log_box = document.getElementById("log_box");
 const body = document.body;
 if ((0, once_upon_a_closed_source_1.exists)(slider) && (text_box) && (log_box) && (body)) {
-    const log = new once_upon_a_closed_source_1.Log(log_box);
+    const ini_temp_val = slider.value;
+    once_upon_a_closed_source_1.log.add_screen(log_box);
     slider.oninput = () => {
         const color_hex = (0, once_upon_a_closed_source_1.get_color_int)({
             high: parseFloat(slider.max),
             low: parseFloat(slider.min),
-            mild: 25,
+            mild: parseFloat(ini_temp_val),
             tmpr: parseFloat(slider.value)
-        }).toString(16);
+        }).toString(16).padStart(6, '0');
         text_box.innerHTML = `${slider.value}°C`;
         body.style.backgroundColor = `#${color_hex}`;
-        log.add(`${slider.value}°C\t#${color_hex}`);
-        log.clrdata();
+        once_upon_a_closed_source_1.log.add(`${slider.value}°C\t#${color_hex}`);
+        once_upon_a_closed_source_1.log.clear_data();
     };
 }
 
