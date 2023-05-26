@@ -21,7 +21,6 @@ if (exists(slider)&&(text_box)&&(log_box)&&(body)) {
 
         text_box.innerHTML = `${slider.value}°C`;
         body.style.backgroundColor = `#${color_hex}`;
-        log.add(`${slider.value}°C\t#${color_hex}`);
-        log.clear_data();
+        log.add(`tempr: ${slider.value}°C,\tcolor: #${color_hex}`);
     }
 }
