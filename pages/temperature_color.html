@@ -66,30 +66,10 @@
         }
     </style>
     <div class="centre_container">
-        <textarea id="log_box" cols="30" rows="10" class="log_place" readonly>No current log.</textarea>
+        <textarea id="log_box" cols="30" rows="10" class="log_place" readonly>no log</textarea>
         <div id="temperature_number" class="number_place">0</div>
         <input type="range" min="5" max="45" value="25" class="slider" id="temperature_color_range">
     </div>
-    <script>
-        const slider = document.getElementById("temperature_color_range")
-        const text_box = document.getElementById("temperature_number");
-        const log_box = document.getElementById("log_box");
-        const body = document.body;
-        let err_log = "";
-        function log(err){
-            err_log += `\n${err}`;
-            log_box.innerHTML = err_log;
-            log_box.scrollTop = log_box.scrollHeight;
-        }
-        function clear_log(){
-            err_log = "";
-            log_box.scrollTop = log_box.scrollHeight;
-        };
-        slider.oninput = () => {
-            const color_hex = get_color_hex(slider.value);
-            text_box.innerHTML = `${slider.value}°C #${color_hex}`;
-            body.style.backgroundColor = `#${color_hex}`
-        }
-    </script>
+    <script type="text/javascript" src="./main.js"></script>
 </body>
 </html>

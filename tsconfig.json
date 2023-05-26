@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
+    "target": "es2021",
+    "module": "none",
     "lib": ["es2021", "DOM"],
     "declaration": true,
-    "outDir": "dist/",
+    "outDir": "./dist",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -18,11 +18,18 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "types": []
   },
   "include": [
-    "once_upon_a_closed_source.ts"
+    "./pages/*.ts",
+    "./once_upon_a_closed_source.ts",
   ],
-  "exclude": ["node_modules/", "dist/"]
+  "exclude": [
+    "node_modules/",
+    "dist/",
+    "./bot.ts",
+    "./weather-types.ts"
+  ]
 }

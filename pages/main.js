@@ -1,52 +1,50 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dateIsoToUnixSec = exports.CtoF = exports.FtoC = exports.get_color_int = exports.exists = void 0;
-function exists(data) {
-    if ((data === null) ||
-        (data === undefined))
-        return false;
-    return true;
-}
-exports.exists = exists;
-function get_color_int(by_c) {
-    let result = "";
-    if (!exists(by_c)) { //no temperature -> return random
-        const characters = '0123456789abcdef';
-        const randomValues = new Uint8Array(6);
-        crypto.getRandomValues(randomValues);
-        randomValues.forEach(int => result += characters.charAt(int % characters.length));
+const once_upon_a_closed_source_1 = require("../once_upon_a_closed_source");
+class Log {
+    constructor(target_elm, init_text, locked) {
+        this.log_box = target_elm;
+        if ((0, once_upon_a_closed_source_1.exists)(init_text))
+            target_elm.innerHTML = init_text;
+        this.locked = (0, once_upon_a_closed_source_1.exists)(locked) ? locked : false;
     }
-    else { //this is a linear map 🥲
-        if (by_c.tmpr <= 10)
-            by_c.tmpr = 10;
-        if (by_c.tmpr >= 40)
-            by_c.tmpr = 40;
-        if (by_c.tmpr > 25) {
-            result += Math.floor((by_c.tmpr - 25) * 255 / 15).toString(16);
+    add(text) {
+        if (this.locked) {
+            return false;
         }
         else {
-            result += "00";
-        }
-        result += "00";
-        if (by_c.tmpr < 25) {
-            result += Math.floor((25 - by_c.tmpr) * 255 / 15).toString(16);
-        }
-        else {
-            result += "00";
+            this.log_box.innerHTML += `${text}\n`;
+            return true;
         }
     }
-    return parseInt(result, 16);
+    ;
+    lock(act) {
+        this.locked = act;
+        return true;
+    }
+    clr() {
+        this.log_box.innerHTML = "";
+        return true;
+    }
+    ;
 }
-exports.get_color_int = get_color_int;
-function FtoC(F) {
-    return (F - 32) * 5 / 9;
+const slider = document.getElementById("temperature_color_range");
+const text_box = document.getElementById("temperature_number");
+const log_box = document.getElementById("log_box");
+const body = document.body;
+if ((0, once_upon_a_closed_source_1.exists)(slider) && (text_box) && (log_box) && (body)) {
+    const log = new Log(log_box);
+    slider.oninput = () => {
+        alert("it works");
+        const color_hex = parseInt((0, once_upon_a_closed_source_1.get_color_int)({
+            high: parseFloat(slider.max),
+            low: parseFloat(slider.min),
+            mild: 25,
+            tmpr: parseFloat(slider.value)
+        }).toString(), 16);
+        text_box.innerHTML = `${slider.value}°C`;
+        body.style.backgroundColor = `#${color_hex}`;
+        log.add(`${slider.value}°C\t#${color_hex}`);
+        log.clr();
+    };
 }
-exports.FtoC = FtoC;
-function CtoF(C) {
-    return (C * 9 / 5) + 32;
-}
-exports.CtoF = CtoF;
-function dateIsoToUnixSec(iso) {
-    return (new Date(iso)).getTime() / 1000;
-}
-exports.dateIsoToUnixSec = dateIsoToUnixSec;

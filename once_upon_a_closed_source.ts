@@ -1,3 +1,8 @@
+// ALL THINGS IN THIS FILE ARE FROM BY PRIVATE LIBRARIES AND
+// WERE ONCE CLOSED SOURCE.
+// IN EFFORTS TO COMPLETELY OPEN SOURCE "FIT Weather Chan"
+// I HAVE COLLECTED ALL THE NECESSARY CODE FROM MY PRIVATE
+// LIBRARIES AND PUT THEM HERE.
 "use strict";
 
 export function exists<T>(data: T|null|undefined): data is T {
@@ -8,28 +13,28 @@ export function exists<T>(data: T|null|undefined): data is T {
   return true;
 }
 
-export function get_color_int(by_c?: {high: number, low: number, mild: number, tmpr: number}): number { //range: 10c to 40c
-  let result = "";
+export function get_color_int(by_c?: {high: number, low: number, mild: number, tmpr: number}): string {
+  let res = "";
   if (!exists(by_c)) { //no temperature -> return random
     const characters = '0123456789abcdef';
     const randomValues = new Uint8Array(6); crypto.getRandomValues(randomValues);
-    randomValues.forEach(int => result += characters.charAt(int % characters.length));
+    randomValues.forEach(int => res += characters.charAt(int % characters.length));
   } else { //this is a linear map 🥲
-    if (by_c.tmpr <= 10) by_c.tmpr = 10;
-    if (by_c.tmpr >= 40) by_c.tmpr = 40;
-    if (by_c.tmpr > 25) {
-        result += Math.floor((by_c.tmpr-25)*255/15).toString(16);
+    if (by_c.high <= by_c.low) by_c.high = by_c.low+2; //avoid /0 error
+    if ((by_c.low > by_c.mild)||(by_c.high < by_c.mild)) by_c.mild = (by_c.high+by_c.low)/2;
+    if (by_c.tmpr <= by_c.low) by_c.tmpr = by_c.low;
+    if (by_c.tmpr >= by_c.high) by_c.tmpr = by_c.high;
+    if (by_c.tmpr > by_c.mild) {
+      const norm = (by_c.tmpr-by_c.mild)/(by_c.high-by_c.mild);
+      res = Math.floor(127+(norm*127)).toString(16);
+      res += "7f"+Math.floor((by_c.tmpr-25)*255/15).toString(16);
     } else {
-        result += "00";
-    }
-    result += "00";
-    if (by_c.tmpr < 25) {
-        result += Math.floor((25-by_c.tmpr)*255/15).toString(16);
-    } else {
-        result += "00";
+      const norm = (by_c.tmpr-by_c.low)/(by_c.mild-by_c.low);
+      res = Math.floor(norm*127).toString(16);
+      res += "7f"+Math.floor((by_c.tmpr-25)*255/15).toString(16);
     }
   }
-  return parseInt(result, 16);
+  return res;
 }
 
 export function FtoC(F: number) {
