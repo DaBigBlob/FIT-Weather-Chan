@@ -27,12 +27,12 @@ export class Log {
   private update_log_box(text?: string): boolean {
     if (exists(this.log_box)) {
       if (exists(text)) {
-        this.log_box.innerHTML = this.log_data;
-        return true;
+        this.log_box.innerHTML = text;
       } else {
         this.log_box.innerHTML = this.log_data;
-        return true;
       }
+      this.log_box.scrollTop = this.log_box.scrollHeight;
+      return true;
     } else {
       return false;
     }

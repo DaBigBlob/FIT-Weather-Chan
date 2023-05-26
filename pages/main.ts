@@ -15,12 +15,27 @@ if (exists(slider)&&(text_box)&&(log_box)&&(body)) {
         const color_hex = get_color_int({
             high: parseFloat(slider.max),
             low: parseFloat(slider.min),
-            mild: parseFloat(ini_temp_val), //deg c
+            mild: parseFloat(ini_temp_val),
             tmpr: parseFloat(slider.value)
         }).toString(16).padStart(6, '0');
 
         text_box.innerHTML = `${slider.value}°C`;
         body.style.backgroundColor = `#${color_hex}`;
         log.add(`tempr: ${slider.value}°C,\tcolor: #${color_hex}`);
+    }
+
+    text_box.onclick = () => {
+        const color_hex = get_color_int({
+            high: parseFloat(slider.max),
+            low: parseFloat(slider.min),
+            mild: parseFloat(ini_temp_val),
+            tmpr: parseFloat(ini_temp_val)
+        }).toString(16).padStart(6, '0');
+
+        log.clear_data();
+        log.clear_screen();
+        slider.value = ini_temp_val;
+        text_box.innerHTML = `${slider.value}°C`;
+        body.style.backgroundColor = `#${color_hex}`;
     }
 }
