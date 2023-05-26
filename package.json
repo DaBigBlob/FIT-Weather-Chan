@@ -5,7 +5,7 @@
   "main": "bot.ts",
   "scripts": {
     "downstream": "cp ../new.ventures0/bots/cloudflare/src/FIT-weather/* ./src/",
-    "build-pages": "npx webpack && cp ./README.md ./pages/README.md"
+    "build-pages": "npx webpack && cp ./README.md ./docs/README.md"
   },
   "repository": {
     "type": "git",

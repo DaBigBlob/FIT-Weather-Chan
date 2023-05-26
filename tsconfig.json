@@ -23,7 +23,7 @@
     "types": []
   },
   "include": [
-    "./pages/*.ts",
+    "./docs/*.ts",
     "./src/once_upon_a_closed_source.ts",
   ],
   "exclude": [
