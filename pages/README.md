@@ -1,7 +1,7 @@
 # FIT-Weather-Chan
 Hourly weather updates for Florida Institute of Technology campus
 
-<center> <img src="sample0.png" alt="logo" width="100%" style="border-radius: 20px"> </center>
+<center> <img src="./media/sample0.png" alt="logo" width="100%" style="border-radius: 20px"> </center>
 
 ## How do I add/use it?
 
