@@ -14,9 +14,10 @@
             border: 0px;
             margin: 0px;
             position: relative;
+            font-family: monospace;
 
             /* [PUBLIC] specifics */
-            --pannel-width: 70vw;
+            --pannel-width: 75vw;
             --pannel-height: 40vh;
         }
 
@@ -54,7 +55,7 @@
             /* template */
             /* -------edit---------- */
             --width: var(--pannel-width);
-            --height: calc(var(--pannel-height)*(7/10));
+            --height: calc(var(--pannel-height)*(5/10));
             --margin: 0px;
             --border: 0px;
             --padding: 20px;
@@ -74,9 +75,35 @@
 
             background-color: rgb(76, 78, 79);
             color: antiquewhite;
-            font-family: monospace;
-            font-size: 25px;
+            font-size: 1.5em;
             resize: none;
+        }
+
+        .info {
+            /* template */
+            /* -------edit---------- */
+            --width: var(--pannel-width);
+            --height: calc(var(--pannel-height)*(2/10));
+            --margin: 0px;
+            --border: 0px;
+            --padding: 0px;
+            --parent-width: var(--pannel-width);
+            --parent-height: var(--pannel-height);
+            border-radius: 20px;
+            position: relative;
+            /* --------switch--------- */
+            width: calc(var(--width) - (var(--margin) + var(--border) + var(--padding))*2);
+            height: calc(var(--height) - (var(--margin) + var(--border) + var(--padding))*2);
+            padding: var(--padding);
+            border: var(--border);
+            margin: var(--margin);
+            /* margin-left: calc((var(--parent-width) - var(--width))/2);  */
+            /* margin-top: calc((var(--parent-height) - var(--height))/2); */
+            /* ----------------- */
+
+            background-color: rgb(9, 9, 16);
+            text-align: center;
+            font-size: 1.2em;
         }
 
         .number_place {
@@ -86,7 +113,7 @@
             --height: calc(var(--pannel-height)*(2/10));
             --margin: 0px;
             --border: 0px;
-            --padding: 5px;
+            --padding: auto;
             --parent-width: var(--pannel-width);
             --parent-height: var(--pannel-height);
             border-radius: 20px;
@@ -104,8 +131,7 @@
             width: 100%;
             height: 20%;
             text-align: center;
-            padding: auto;
-            font-size: 50px;
+            font-size: 5em;
             cursor: pointer;
         }
 
@@ -138,6 +164,13 @@
     </style>
     <div class="centre_container">
         <textarea id="log_box" cols="30" rows="10" class="log_place" readonly>no log</textarea>
+        <div class="info">
+            This is the Temperature -> Color testbench for "FIT Weather Chan" embeds. <br>
+            Code in action:
+            <a href="https://github.com/DaBigBlob/FIT-Weather-Chan/blob/b69acd934f9ecf83bd1891419b8b57d4b7eb6bb2/src/once_upon_a_closed_source.ts#L73">
+                https://github.com/DaBigBlob/FIT-Weather-Chan/blob/b69acd934f9ecf83bd1891419b8b57d4b7eb6bb2/src/once_upon_a_closed_source.ts#L73
+            </a>
+        </div>
         <div id="temperature_number" class="number_place">25.00°C/77.00°F</div>
         <input type="range" min="15" max="33" value="25" step="0.01" class="slider" id="temperature_color_range">
     </div>
