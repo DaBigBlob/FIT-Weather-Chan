@@ -7,7 +7,7 @@ Hourly weather updates for Florida Institute of Technology campus
 
 1. [**Add the bot**](https://discord.com/api/oauth2/authorize?client_id=952765140468654100&permissions=536870912&scope=bot) to your FIT-related server. (only needs `Manage Webhooks` permission)
 
-2. Make a pull request appending your channel ID to the `discord_channels` array in [`others.json`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/src/others.json). Or [contact me on discord](https://discord.com/users/710693649662476359).
+2. Make an issuse requesting the same or [contact me on discord](https://discord.com/users/710693649662476359). I'll add your channel ID to the `discord_channels` array in [`others.json`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/src/others.json). (Do not make a pull request.)
 
 3. Done. Your FIT-related server channel should start receaving hourly weather updates as above.
 
@@ -40,8 +40,9 @@ FIT Weather Chan runs on my **private** API backend and uses some of the shared 
 I dont care.
 
 ### There are improvements to be made
-Please start making pull requests.
+Please make a pull request.
 
 ## Special thanks
 - [NATIONAL WEATHER SERVICE](https://www.weather.gov/) for the weather data.
 - [WillowTheFuta#2396](https://discord.com/users/710302678323953676) for the avatar.
+- The Voices in my head for the encouragement and existential dread.
