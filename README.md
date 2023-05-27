@@ -44,4 +44,4 @@ Please start making pull requests.
 
 ## Special thanks
 - [NATIONAL WEATHER SERVICE](https://www.weather.gov/) for the weather data.
-- [WillowTheFuta#2396](https://discord.com/users/710302678323953676) for the avatar and inspiration for *this*.
+- [WillowTheFuta#2396](https://discord.com/users/710302678323953676) for the avatar.
