@@ -96,7 +96,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
                 { name: "Relative Humidity", value: `🐳 ${wthr.ok.relativeHumidity.value}%`, inline: true },
                 { name: "Probability of Rain", value: `☔️ ${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
             ].concat((day_forcase.isOk()) ? [
-                { name: `Overall ${day_forcase.ok.name} 🧐`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
+                { name: `${day_forcase.ok.name} 🌦️`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
             image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
         }]
