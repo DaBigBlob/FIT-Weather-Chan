@@ -7,7 +7,7 @@ Hourly weather updates for Florida Institute of Technology campus
 
 1. [**Add the bot**](https://discord.com/api/oauth2/authorize?client_id=952765140468654100&permissions=536870912&scope=bot) to your FIT-related server. (only needs `Manage Webhooks` permission)
 
-2. Make a pull request appending your channel ID to the `discord_channels` array in [`others.json`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/others.json). Or [contact me on discord](https://discord.com/users/710693649662476359).
+2. Make a pull request appending your channel ID to the `discord_channels` array in [`others.json`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/src/others.json). Or [contact me on discord](https://discord.com/users/710693649662476359).
 
 3. Done. Your FIT-related server channel should start receaving hourly weather updates as above.
 
@@ -34,7 +34,7 @@ import { host_url } from '../main';
 ```
 **Where is the code for these imports?** \
 Most of these imports either in this repository or are from [NPM packages](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/package.json).
-FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
+FIT Weather Chan runs on my **private** API backend and uses some of the shared libraries. **But** I've collected all relevant imported code into [`once_upon_a_closed_source.ts`](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/main/src/once_upon_a_closed_source.ts) to make this project 100% open source. ✨
 
 ### There are spelling mistakes in variable names
 I dont care.
