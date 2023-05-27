@@ -89,14 +89,14 @@ export async function dealFITWeatherScheduler(): Promise<void> {
             }),
             thumbnail: { url: udef(wthr.ok.icon, "") },
             fields: [
-                { name: "TL;DR", value: `🏃🏼 ${wthr.ok.shortForecast}`, inline: false },
+                { name: "TL;DR 🏃🏼", value: `${wthr.ok.shortForecast}`, inline: false },
                 { name: "Temperature", value: `🌡️ ${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
                 { name: "Wind", value: `🍃 ${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
                 { name: "Dewpoint", value: `💧 ${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
                 { name: "Relative Humidity", value: `🐳 ${wthr.ok.relativeHumidity.value}%`, inline: true },
                 { name: "Probability of Rain", value: `☔️ ${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
             ].concat((day_forcase.isOk()) ? [
-                { name: `Overall ${day_forcase.ok.name}`, value: `🧐 ${day_forcase.ok.detailedForecast}`, inline: false },
+                { name: `Overall ${day_forcase.ok.name} 🧐`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
             image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
         }]
