@@ -77,21 +77,26 @@ export async function dealFITWeatherScheduler(): Promise<void> {
     const payload = JSON.stringify({
         content: null,
         username: "FIT Weather Chan",
-        avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/avatar.png", //og awatar
+        avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/media/avatar.png", //og awatar
         allowed_mentions: {users: [], roles: []},
         embeds: [{
             description: `**Weather** <t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>\n[>project source code here<](https://github.com/DaBigBlob/FIT-Weather-Chan)`,
-            color: get_color_int((wthr.ok.temperatureUnit == "F") ? FtoC(wthr.ok.temperature) : wthr.ok.temperature),
+            color: get_color_int({
+                high: 33,
+                low: 15,
+                mild: 25,
+                tmpr: (wthr.ok.temperatureUnit == "F") ? FtoC(wthr.ok.temperature) : wthr.ok.temperature
+            }),
             thumbnail: { url: udef(wthr.ok.icon, "") },
             fields: [
-                { name: "TL;DR", value: `${wthr.ok.shortForecast}`, inline: false },
-                { name: "Temperature", value: `${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
-                { name: "Wind", value: `${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
-                { name: "Dewpoint", value: `${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
-                { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}%`, inline: true },
-                { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
+                { name: "TL;DR", value: `🏃🏼 ${wthr.ok.shortForecast}`, inline: false },
+                { name: "Temperature", value: `🌡️ ${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
+                { name: "Wind", value: `🍃 ${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
+                { name: "Dewpoint", value: `💧 ${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
+                { name: "Relative Humidity", value: `🐳 ${wthr.ok.relativeHumidity.value}%`, inline: true },
+                { name: "Probability of Rain", value: `☔️ ${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
             ].concat((day_forcase.isOk()) ? [
-                { name: `Overall ${day_forcase.ok.name}`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
+                { name: `Overall ${day_forcase.ok.name}`, value: `🧐 ${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
             image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
         }]
