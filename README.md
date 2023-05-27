@@ -13,7 +13,7 @@ Hourly weather updates for Florida Institute of Technology campus
 
 **NOTE: Make sure the bot has `Manage Webhooks` permission in the channel you're adding in step 2**
 
-## Why is the embed color so ugly?
+## Why is the embed color this and not that?
 
 Right. So, the embed color is not static but is decided based on the temperature. \
 Check out [this interactive Temperature to Color page](https://dabigblob.github.io/FIT-Weather-Chan/temperature_color.html) I made using [**this code**](https://github.com/DaBigBlob/FIT-Weather-Chan/blob/8ad5872d8c073ca199e3bdd174e8fd488a6b1ac3/src/once_upon_a_closed_source.ts#L73).
