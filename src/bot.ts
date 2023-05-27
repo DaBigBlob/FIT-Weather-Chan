@@ -93,8 +93,8 @@ export async function dealFITWeatherScheduler(): Promise<void> {
                 { name: "Temper 🌡️", value: `${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
                 { name: "Wind 🍃", value: `${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
                 { name: "Dewpoint 💧", value: `${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
-                { name: "Relative Humidity 🐳", value: `${wthr.ok.relativeHumidity.value}%`, inline: true },
-                { name: "Probability of Rain ☔️", value: `${wthr.ok.probabilityOfPrecipitation.value}%`, inline: true }
+                { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}% 🐳`, inline: true },
+                { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}% ☔️`, inline: true }
             ].concat((day_forcase.isOk()) ? [
                 { name: `Overall ${day_forcase.ok.name} 🧐`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
