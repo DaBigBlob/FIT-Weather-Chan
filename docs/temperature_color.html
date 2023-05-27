@@ -19,6 +19,7 @@
             /* [PUBLIC] specifics */
             --pannel-width: 75vw;
             --pannel-height: 40vh;
+            --text-scale: min(1vh, 1vw);
         }
 
         body {
@@ -75,7 +76,7 @@
 
             background-color: rgb(76, 78, 79);
             color: antiquewhite;
-            font-size: 1.5em;
+            font-size: calc(var(--text-scale)*2.2);
             resize: none;
         }
 
@@ -86,7 +87,7 @@
             --height: calc(var(--pannel-height)*(2/10));
             --margin: 0px;
             --border: 0px;
-            --padding: 0px;
+            --padding: calc(var(--text-scale)*2);
             --parent-width: var(--pannel-width);
             --parent-height: var(--pannel-height);
             border-radius: 20px;
@@ -103,7 +104,8 @@
 
             background-color: rgb(9, 9, 16);
             text-align: center;
-            font-size: 1.2em;
+            font-size: calc(var(--text-scale)*1.7);
+            word-wrap: break-word;
         }
 
         .number_place {
@@ -113,7 +115,7 @@
             --height: calc(var(--pannel-height)*(2/10));
             --margin: 0px;
             --border: 0px;
-            --padding: auto;
+            --padding: calc(var(--text-scale)*1);
             --parent-width: var(--pannel-width);
             --parent-height: var(--pannel-height);
             border-radius: 20px;
@@ -131,7 +133,7 @@
             width: 100%;
             height: 20%;
             text-align: center;
-            font-size: 5em;
+            font-size: calc(var(--text-scale)*7);
             cursor: pointer;
         }
 
