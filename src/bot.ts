@@ -87,7 +87,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
         avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/media/avatar.png", //og awatar
         allowed_mentions: {users: [], roles: []},
         embeds: [{
-            description: `**Weather** `+
+            description: `🕙 **Weather** `+
                         ((exists(wthr.ok.startTime) && exists(wthr.ok.endTime)) ? `<t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>` : "`now` **to** `1 hour from now`")+
                         `\n📓 [>project source code here<](https://github.com/DaBigBlob/FIT-Weather-Chan)`,
             color: get_color_int({
