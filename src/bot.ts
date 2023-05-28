@@ -14,6 +14,30 @@ const fetch_headers = {
     'Accept': "application/geo+json"
 };
 
+async function get_weather_data(hourly: boolean): Promise<Result<Period>> {
+    const proto_res = await (async () => {
+        const raw = await fetch(`${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`, { body: null, method: 'GET', headers: fetch_headers});
+        if (!raw.ok) return null;
+        if (raw.headers.get("Content-Type") != "application/geo+json") return null;
+        return await raw.json() as WeatherData|undefined;
+    })();
+    if (
+        !exists(proto_res) ||
+        !exists(proto_res.properties) ||
+        !exists(proto_res.properties.periods) ||
+        !exists(proto_res.properties.periods)
+    ) return new Err(`No data from ${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`);
+
+    const result = proto_res.properties.periods.find(p => (
+        hourly 
+        ? (exists(p.startTime)&&(dateIsoToUnixSec(p.startTime)*1000 > Date.now())) 
+        : (p.number === 1))
+    );
+    if (exists(result)) return new Ok(result);
+
+    return new Err("Data too old");
+}
+
 //=====place for actual stuff=====
 export async function dealFITWeatherBot(req: Request): Promise<Response> {
 
@@ -49,30 +73,13 @@ export async function dealFITWeatherBot(req: Request): Promise<Response> {
 
 //=====place for the other actual stuff=====
 export async function dealFITWeatherScheduler(): Promise<void> {
-    const now = Date.now();
 
     //get hourly weather
-    const wthr: Result<Period> = await (async () => {
-        const proto_res = (await (await fetch(`${WeatherAPIEndpoint}/hourly`, { body: null, method: 'GET', headers: fetch_headers})).json()) as WeatherData|undefined;
-        if (!exists(proto_res) || !exists(proto_res.properties.periods)) return new Err(`No data from ${WeatherAPIEndpoint}/hourly`);
-
-        const result = proto_res.properties.periods.filter(p => (dateIsoToUnixSec(p.startTime)*1000 > now))[0];
-        if (exists(result)) return new Ok(result);
-
-        return new Err("Data too old");
-    })();
+    const wthr = await get_weather_data(true);
     if (!wthr.isOk()) return;
 
     //get overall day dorcast
-    const day_forcase = await (async () => {
-        const proto_res = (await (await fetch(WeatherAPIEndpoint, { body: null, method: 'GET', headers: fetch_headers})).json()) as WeatherData|undefined;
-        if (!exists(proto_res) || !exists(proto_res.properties.periods)) return new Err(`No data from ${WeatherAPIEndpoint}`);
-
-        const result = proto_res.properties.periods.find(p => (p.number == 1));
-        if (exists(result)) return new Ok(result);
-
-        return new Err("Today's data not found");
-    })();
+    const day_forcase = await get_weather_data(false);
 
     const payload = JSON.stringify({
         content: null,
@@ -80,22 +87,29 @@ export async function dealFITWeatherScheduler(): Promise<void> {
         avatar_url: "https://raw.githubusercontent.com/DaBigBlob/FIT-Weather-Chan/main/media/avatar.png", //og awatar
         allowed_mentions: {users: [], roles: []},
         embeds: [{
-            description: `**Weather** <t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>\n[>project source code here<](https://github.com/DaBigBlob/FIT-Weather-Chan)`,
+            description: `**Weather** `+
+                        ((exists(wthr.ok.startTime) && exists(wthr.ok.endTime)) ? `<t:${dateIsoToUnixSec(wthr.ok.startTime)}:R> **to** <t:${dateIsoToUnixSec(wthr.ok.endTime)}:R>` : "`now` **to** `1 hour from now`")+
+                        `\n📓 [>project source code here<](https://github.com/DaBigBlob/FIT-Weather-Chan)`,
             color: get_color_int({
                 high: 33,
                 low: 15,
                 mild: 25,
-                tmpr: (wthr.ok.temperatureUnit == "F") ? FtoC(wthr.ok.temperature) : wthr.ok.temperature
+                tmpr: ((wthr.ok.temperatureUnit == "F") && exists(wthr.ok.temperature)) ? FtoC(wthr.ok.temperature) : 25
             }),
             thumbnail: { url: udef(wthr.ok.icon, "") },
-            fields: [
-                { name: "TL;DR 🏃🏼", value: `${wthr.ok.shortForecast}`, inline: false },
-                { name: "Temper 🌡️", value: `${Math.floor(wthr.ok.temperature)}°${wthr.ok.temperatureUnit}/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
+            fields: ([] as Array<{ name: string, value: string, inline: boolean }>).concat((exists(wthr.ok.shortForecast)) ? [
+                { name: "TL;DR 🏃🏼", value: `${wthr.ok.shortForecast}`, inline: false }
+            ] : []).concat((exists(wthr.ok.temperature)) ? [
+                { name: "Temper 🌡️", value: `${Math.floor(wthr.ok.temperature)}°F/${Math.floor(FtoC(wthr.ok.temperature))}°C`, inline: true },
+            ] : []).concat((exists(wthr.ok.windSpeed)&&exists(wthr.ok.windDirection)) ? [
                 { name: "Wind 🍃", value: `${wthr.ok.windSpeed} ${wthr.ok.windDirection}`, inline: true },
+            ] : []).concat((exists(wthr.ok.dewpoint)&&exists(wthr.ok.dewpoint.value)) ? [
                 { name: "Dewpoint 💧", value: `${Math.floor(CtoF(wthr.ok.dewpoint.value))}°F/${Math.floor(wthr.ok.dewpoint.value)}°C`, inline: true },
+            ] : []).concat((exists(wthr.ok.relativeHumidity)&&exists(wthr.ok.relativeHumidity.value)) ? [
                 { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}% 🐳`, inline: true },
+            ] : []).concat((exists(wthr.ok.probabilityOfPrecipitation)&&exists(wthr.ok.probabilityOfPrecipitation.value)) ? [
                 { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}% ☔️`, inline: true }
-            ].concat((day_forcase.isOk()) ? [
+            ] : []).concat((day_forcase.isOk()&&exists(day_forcase.ok.detailedForecast)) ? [
                 { name: `Overall ${day_forcase.ok.name} 🧐`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
             image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
@@ -117,7 +131,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
         await fetch(`${RouteBases.api}${Routes.webhook(got_hook.id, got_hook.token)}`, {
             body: payload,
             method: 'POST',
-            headers: {'content-type': 'application/json'}
+            headers: {"Content-Type": 'application/json'}
         });
     }
         
