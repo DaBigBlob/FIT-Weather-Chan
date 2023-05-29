@@ -14,28 +14,40 @@ const fetch_headers = {
     'Accept': "application/geo+json"
 };
 
-async function get_weather_data(hourly: boolean): Promise<Result<Period>> {
-    const proto_res = await (async () => {
-        const raw = await fetch(`${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`, { body: null, method: 'GET', headers: fetch_headers});
-        if (!raw.ok) return null;
-        if (raw.headers.get("Content-Type") != "application/geo+json") return null;
-        return await raw.json() as WeatherData|undefined;
+async function get_weather_data(hourly: boolean, tries: number): Promise<Result<Period>> {
+    const wrapper = await (async () => {
+        const proto_res = await (async () => {
+            const raw = await fetch(`${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`, { body: null, method: 'GET', headers: fetch_headers});
+            if (!raw.ok) return null;
+            if (raw.headers.get("Content-Type") != "application/geo+json") return null;
+            return await raw.json() as WeatherData|undefined;
+        })();
+        if (
+            !exists(proto_res) ||
+            !exists(proto_res.properties) ||
+            !exists(proto_res.properties.periods)
+        ) return new Err(`No data from ${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`);
+    
+        const result = proto_res.properties.periods.find(p => (
+            hourly 
+            ? (exists(p.startTime)&&(dateIsoToUnixSec(p.startTime)*1000 > Date.now())) 
+            : (p.number === 1))
+        );
+        if (exists(result)) return new Ok(result);
+    
+        return new Err(hourly ? "Hourly data too old" : "No daily data");
     })();
-    if (
-        !exists(proto_res) ||
-        !exists(proto_res.properties) ||
-        !exists(proto_res.properties.periods) ||
-        !exists(proto_res.properties.periods)
-    ) return new Err(`No data from ${WeatherAPIEndpoint}${(hourly ? "/hourly" : "")}`);
-
-    const result = proto_res.properties.periods.find(p => (
-        hourly 
-        ? (exists(p.startTime)&&(dateIsoToUnixSec(p.startTime)*1000 > Date.now())) 
-        : (p.number === 1))
-    );
-    if (exists(result)) return new Ok(result);
-
-    return new Err("Data too old");
+    
+    if (wrapper.isOk()) {
+        return new Ok(wrapper.ok);
+    } else {
+        if (tries > 0) {
+            tries--;
+            return await get_weather_data(hourly, tries);
+        } else {
+            return new Err(wrapper.err);
+        }
+    }
 }
 
 //=====place for actual stuff=====
@@ -75,11 +87,11 @@ export async function dealFITWeatherBot(req: Request): Promise<Response> {
 export async function dealFITWeatherScheduler(): Promise<void> {
 
     //get hourly weather
-    const wthr = await get_weather_data(true);
+    const wthr = await get_weather_data(true, 3);
     if (!wthr.isOk()) return;
 
     //get overall day dorcast
-    const day_forcase = await get_weather_data(false);
+    const day_forcase = await get_weather_data(false, 2);
 
     const payload = JSON.stringify({
         content: null,
@@ -109,7 +121,7 @@ export async function dealFITWeatherScheduler(): Promise<void> {
                 { name: "Relative Humidity", value: `${wthr.ok.relativeHumidity.value}% 🐳`, inline: true },
             ] : []).concat((exists(wthr.ok.probabilityOfPrecipitation)&&exists(wthr.ok.probabilityOfPrecipitation.value)) ? [
                 { name: "Probability of Rain", value: `${wthr.ok.probabilityOfPrecipitation.value}% ☔️`, inline: true }
-            ] : []).concat((day_forcase.isOk()&&exists(day_forcase.ok.detailedForecast)) ? [
+            ] : []).concat((day_forcase.isOk()&&exists(day_forcase.ok.detailedForecast)&&exists(day_forcase.ok.name)) ? [
                 { name: `Overall ${day_forcase.ok.name} 🧐`, value: `${day_forcase.ok.detailedForecast}`, inline: false },
             ] : []),
             image: { url: `${host_url}/fitweather/dist/${crypto.randomUUID()}` } //to circumvent discord's media caching ✨nightmare✨
